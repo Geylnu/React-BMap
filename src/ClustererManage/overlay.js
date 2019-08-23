@@ -29,17 +29,10 @@ MyOverlay.prototype.draw = function (){
 const Overlay = props => {
     let { map } = props
     let container = document.createElement('div')
-
-    useEffect(() => {
-        let point = new BMap.Point(116.407845,39.914101)
-        let tmp = new MyOverlay(point,container,map)
-        map.addOverlay(tmp)
-        return ()=>{
-            map.removeOverlay(tmp)
-        }
-    })
     ReactDOM.render(<div {...props}>{props.children}</div>, container)
-    return null
+    let point = new BMap.Point(116.407845,39.914101)
+    let tmp = new MyOverlay(point,container,map)
+    return tmp
 }
 
 export default Overlay

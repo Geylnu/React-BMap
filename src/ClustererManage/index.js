@@ -16,9 +16,9 @@ const getMarkers =(data)=>{
 const ClustererManage = props =>{
     let {map,data,cluster} = props
     
-    let {MarkerClusterer} = BMapLib
+    let {MarkerClusterer: MarkerClusterer2} = BMapLib
     let markers = getMarkers(data)
-    let clustererManage = new MarkerClusterer(map,{markers})
+    let clustererManage = new MarkerClusterer2(map,{markers})
     return null
 }
 
