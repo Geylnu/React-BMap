@@ -2,19 +2,18 @@ import React, { useEffect } from "react"
 import ReactDOM from 'react-dom'
 import BMap from 'BMap'
 
-function MyOverlay(point,container,map) {
+function MyOverlay(point,container) {
     this._container = container
     this._point = point
-    this._map = map
 }
 MyOverlay.prototype = new BMap.Overlay()
 MyOverlay.prototype.constructor = MyOverlay
-MyOverlay.prototype.initialize = function () {
+MyOverlay.prototype.initialize = function (map) {
     let container = this._container
     container.style.position = "absolute"
     container.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
     //在调用removeOverlay后会自动从容器中去除
-    this._map.getPanes().labelPane.appendChild(container);
+    map.getPanes().labelPane.appendChild(container);
     return this._container
 }
 
@@ -27,12 +26,10 @@ MyOverlay.prototype.draw = function (){
 }
 
 const Overlay = props => {
-    let { map } = props
     let container = document.createElement('div')
     ReactDOM.render(<div {...props}>{props.children}</div>, container)
     let point = new BMap.Point(116.407845,39.914101)
-    let tmp = new MyOverlay(point,container,map)
-    return tmp
+    let tmp = new MyOverlay(point,container)
+    return null
 }
-
 export default Overlay

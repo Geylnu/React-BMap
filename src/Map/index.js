@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import ClustererManage from '../ClustererManage'
 import Overlay from '../ClustererManage/overlay'
-import Overlay2 from '../ClustererManage/overlayDemo'
+import OverlayTest from '../ClustererManage/OverlayTest'
 
 import { Map, Marker, NavigationControl, InfoWindow } from 'react-bmap'
 import BMap from 'BMap'
@@ -23,7 +23,7 @@ const $Map = props => {
     return (<Map style={{}} center={{ lng: 116.402544, lat: 39.928216 }} zoom="5" enableScrollWheelZoom={true}>
     <NavigationControl />
     <ClustererManage data={genData(1000)}/>
-    
+    <OverlayTest></OverlayTest>
 </Map>)
 }
 

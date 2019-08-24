@@ -16,8 +16,9 @@ const getMarkers =(data)=>{
 }
 
 const ClustererManage = props =>{
-    let {map,data,cluster} = props
+    let {map,data} = props
     let markers = getMarkers(data)
+    
     let clustererManage = new MarkerClusterer(map,{markers})
     return null
 }
