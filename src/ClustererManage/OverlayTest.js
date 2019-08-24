@@ -8,10 +8,10 @@ const Overlay = props => {
     let point = new BMap.Point(116.407845,39.914101)
     let icon1 = new TextIcon(point,'A')
     map.addOverlay(icon1)
-    let point2 = new BMap.Point(115.407845,38.914101)
-    map.addOverlay(new TextIcon(point2,'B'))
+    let point2 = new BMap.Point(115.407845,37.914101)
+    icon1.setText(4)
     window.setTimeout(()=>{
-        icon1.setText(4)
+        icon1.setPosition(point2)
     },3000)
     return null
 }

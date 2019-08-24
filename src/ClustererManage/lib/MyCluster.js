@@ -2,6 +2,7 @@ import BMap from 'BMap'
 import BMapLib from 'BMapLib'
 
 import {getExtendedBounds} from './utils'
+import TextIcon from './TextIcon'
 
 /**
  * @ignore
@@ -20,7 +21,8 @@ function Cluster(markerClusterer) {
     this._gridBounds = null;//以中心点为准，向四边扩大gridSize个像素的范围，也即网格范围
     this._isReal = false; //真的是个聚合
 
-    this._clusterMarker = new BMapLib.TextIconOverlay(this._center, this._markers.length, { "styles": this._markerClusterer.getStyles() });
+    // this._clusterMarker = new BMapLib.TextIconOverlay(this._center, this._markers.length, { "styles": this._markerClusterer.getStyles() });
+    this._clusterMarker = new TextIcon(this._center, this._markers.length)
     //this._map.addOverlay(this._clusterMarker);
 }
 

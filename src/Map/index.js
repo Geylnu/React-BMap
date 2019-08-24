@@ -23,7 +23,7 @@ const $Map = props => {
     return (<Map style={{}} center={{ lng: 116.402544, lat: 39.928216 }} zoom="5" enableScrollWheelZoom={true}>
     <NavigationControl />
     <ClustererManage data={genData(1000)}/>
-    <OverlayTest></OverlayTest>
+    {/* <OverlayTest></OverlayTest> */}
 </Map>)
 }
 
