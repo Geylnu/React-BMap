@@ -67,6 +67,7 @@ class TextIcon extends Overlay {
     }
 
     setText(text){
+        //ReactDoM.render()是异步的，所以callBack可能并没有被注册，所以使用任务队列解决
         if (this._callBack === null){
             this._taskList.push(()=>{
                 this._callBack(text)
