@@ -1,6 +1,8 @@
 import BMap from 'BMap'
 import BMapLib from 'BMapLib'
 
+import MarkerClusterer from './lib/MarkerClusterer'
+
 
 const getMarkers =(data)=>{
     let markList = []
@@ -15,10 +17,8 @@ const getMarkers =(data)=>{
 
 const ClustererManage = props =>{
     let {map,data,cluster} = props
-    
-    let {MarkerClusterer: MarkerClusterer2} = BMapLib
     let markers = getMarkers(data)
-    let clustererManage = new MarkerClusterer2(map,{markers})
+    let clustererManage = new MarkerClusterer(map,{markers})
     return null
 }
 
