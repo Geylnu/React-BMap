@@ -42,13 +42,13 @@ let style = {
 
 const Bridge = props => {
     let initText = props.text
-    let { textChangeCallback } = props
+    let { textChangeCallback,onClick } = props
     let [text, setText] = useState(initText)
     textChangeCallback && textChangeCallback((newText) => {
         setText(newText)
     })
 
-    return (<div style={style}>
+    return (<div style={style} onClick={onClick}>
         <h1 style={{ padding: '0px', margin: '0px',fontSize:'20px'}}>
             {text}
         </h1>
@@ -63,7 +63,14 @@ class TextIcon extends Overlay {
         this._text = text
         this._callBack = null
         this._taskList = []
-        this._reactElement = <Bridge text={text}
+        this._eventCenter = {}
+        
+        const handleClick = (e)=>{
+            this._eventCenter['click'].forEach((handle)=>{
+                handle(e)
+            })
+        }
+        this._reactElement = <Bridge text={text} onClick={handleClick}
             textChangeCallback={func => { this._callBack = func }}
         />
         ReactDOM.render(this._reactElement, this._container, () => {
@@ -89,6 +96,13 @@ class TextIcon extends Overlay {
             this._position = position;
             this.draw()
         }
+    }
+
+    addEventListener(type,handle){
+        if (!this._eventCenter[type]){
+            this._eventCenter[type] = []
+        }
+        this._eventCenter[type].push(handle)
     }
 }
 

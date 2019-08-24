@@ -3,6 +3,7 @@ import BMapLib from 'BMapLib'
 
 import {getExtendedBounds} from './utils'
 import TextIcon from './TextIcon'
+import infoBox from './infoBox'
 
 /**
  * @ignore
@@ -136,43 +137,28 @@ Cluster.prototype.updateClusterMarker = function () {
     var thatMap = this._map;
     var thatBounds = this.getBounds();
     let first = true
-    let test = this._clusterMarker
-    let html = document.createElement('div')
 
-    this._markers.forEach((value, index) => {
-        let son = document.createElement('div')
-        son.innerText = `marker${index}`
-        son.addEventListener('click', (e) => {
-            // let pot = value.getPosition()
-            // thatMap.setViewport(getExtendedBounds(
-            //     this._map,
-            //     new BMap.Bounds(pot,pot),
-            //     0))
-            this._map.zoomTo(15)
-            this._map.panTo(value.getPosition())
-        })
-        html.appendChild(son)
-    })
+    // this._markers.forEach((value, index) => {
+    //     let son = document.createElement('div')
+    //     son.innerText = `marker${index}`
+    //     son.addEventListener('click', (e) => {
+    //         let pot = value.getPosition()
+    //         thatMap.setViewport(getExtendedBounds(
+    //             this._map,
+    //             new BMap.Bounds(pot,pot),
+    //             0))
+    //         this._map.zoomTo(15)
+    //         this._map.panTo(value.getPosition())
+    //     })
+    //     html.appendChild(son)
+    // })
 
-    html.onclick = () => {
-        console.log('hi')
-    }
+
     this._clusterMarker.addEventListener("click", (event) => {
         if (first) {
-            // var infoBox = new BMapLib.InfoBox(this._map, html, {
-            //     boxStyle: {
-            //         background: "rgba(44,44,44,0.5) no-repeat center top"
-            //         , width: "270px"
-            //         , height: "300px"
-            //     }
-            //     , closeIconMargin: "1px 1px 0 0"
-            //     , enableAutoPan: true
-            // });
-
-            // infoBox.open(this._clusterMarker.getPosition())
             console.log(this._markers)
 
-            // thatMap.setViewport(thatBounds);
+            thatMap.setViewport(thatBounds);
         }
     });
 
