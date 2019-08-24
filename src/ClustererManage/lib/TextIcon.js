@@ -91,6 +91,10 @@ class TextIcon extends Overlay {
         }
     }
 
+    getPosition(position){
+        return this._position
+    }
+
     setPosition(position) {
         if (position && (!this._position || !this._position.equals(position))) {
             this._position = position;

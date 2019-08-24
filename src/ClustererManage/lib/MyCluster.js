@@ -3,7 +3,7 @@ import BMapLib from 'BMapLib'
 
 import {getExtendedBounds} from './utils'
 import TextIcon from './TextIcon'
-import infoBox from './infoBox'
+import InfoBox from './infoBox'
 
 /**
  * @ignore
@@ -155,11 +155,10 @@ Cluster.prototype.updateClusterMarker = function () {
 
 
     this._clusterMarker.addEventListener("click", (event) => {
-        if (first) {
             console.log(this._markers)
-
-            thatMap.setViewport(thatBounds);
-        }
+            let infoBox = new InfoBox(this._clusterMarker.getPosition())
+            infoBox.open()
+            // thatMap.setViewport(thatBounds);
     });
 
 };

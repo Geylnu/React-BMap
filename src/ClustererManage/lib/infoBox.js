@@ -30,12 +30,18 @@ Overlay.prototype.draw = function () {
 }
 
 const Bridge = props =>{
-    return (<div></div>)
+    return (<div><h1>Hello world</h1></div>)
 }
-
 class Infowindow extends Overlay{
-    constructor(point,data){
-        
+    constructor(point,map,data){
+        super(point)
+        this._reactElement = (<Bridge/>)
+        ReactDOM.render(this._reactElement,this._container)
+    }
+
+    open(){
+        console.log(this._map)
+        this._map.addOverlay(this)
     }
 }
 
