@@ -24,6 +24,7 @@ const $Map = props => {
     <NavigationControl />
     <ClustererManage data={genData(1000)}/>
     {/* <OverlayTest></OverlayTest> */}
+    {/* <Marker position={{lng: 116.407845, lat: 39.914101}} /> */}
 </Map>)
 }
 

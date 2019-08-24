@@ -10,9 +10,6 @@ const Overlay = props => {
     map.addOverlay(icon1)
     let point2 = new BMap.Point(115.407845,37.914101)
     icon1.setText(4)
-    window.setTimeout(()=>{
-        icon1.setPosition(point2)
-    },3000)
     return null
 }
 export default Overlay
