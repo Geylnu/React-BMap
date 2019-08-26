@@ -1,33 +1,7 @@
 import React, { useState } from "react"
 import ReactDOM from 'react-dom'
 import BMap from 'BMap'
-
-function Overlay(point) {
-    this._container = document.createElement('div')
-    this._position = point
-
-
-}
-Overlay.prototype = new BMap.Overlay()
-Overlay.prototype.constructor = Overlay
-Overlay.prototype.initialize = function (map) {
-    this._map = map
-    let container = this._container
-    container.style.position = "absolute"
-    //在调用removeOverlay后会自动从容器中去除
-    map.getPanes().labelPane.appendChild(container);
-    return this._container
-}
-
-Overlay.prototype.draw = function () {
-    if (!this._position) {
-        return
-    }
-    let map = this._map;
-    let pixel = map.pointToOverlayPixel(this._position);
-    this._container.style.left = `${pixel.x}px`;
-    this._container.style.top = `${pixel.y}px`;
-}
+import Overlay from './customerOVerlay'
 
 let style = {
     background: 'rgba(215,45,45,0.4)',
@@ -58,7 +32,7 @@ const Bridge = props => {
 
 class TextIcon extends Overlay {
     constructor(point, text) {
-        super(point)
+        super(point,'labelPane')
         this._position = point
         this._text = text
         this._callBack = null
