@@ -1,5 +1,5 @@
 ﻿import BMap from 'BMap'
-import Cluster from './MyCluster'
+import Cluster from './Cluster'
 
 import {getExtendedBounds} from './utils'
 /**
