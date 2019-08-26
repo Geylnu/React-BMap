@@ -156,7 +156,7 @@ Cluster.prototype.updateClusterMarker = function () {
 
     this._clusterMarker.addEventListener("click", (event) => {
             console.log(this._markers)
-            let infoBox = new InfoBox(this._clusterMarker.getPosition())
+            let infoBox = new InfoBox(this._clusterMarker.getPosition(),this._map,this._markers)
             infoBox.open()
             // thatMap.setViewport(thatBounds);
     });
