@@ -17,8 +17,18 @@ const getMarkers =(data)=>{
 const ClustererManage = props =>{
     let {map,data} = props
     let markers = getMarkers(data)
+
+    let begin = Date.now()
+    const renderStart = ()=>{
+        begin = Date.now()
+    }
+
+    const renderEnd = ()=>{
+        console.log(Date.now() - begin)
+    }
     
-    let clustererManage = new MarkerClusterer(map,{markers})
+    let clustererManage = new MarkerClusterer(map,
+        {markers,renderStart,renderEnd})
     return null
 }
 

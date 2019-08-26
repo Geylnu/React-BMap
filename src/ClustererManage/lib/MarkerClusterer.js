@@ -101,6 +101,8 @@ function MarkerClusterer(map, options) {
     this._maxZoom = opts["maxZoom"] || 18;
     this._minClusterSize = opts["minClusterSize"] || 2;
     this._isAverageCenter = false;
+    this._renderStartCallback = opts['renderStart']
+    this._renderEndCallback = opts['renderEnd']
     if (opts['isAverageCenter'] != undefined) {
         this._isAverageCenter = opts['isAverageCenter'];
     }
@@ -161,6 +163,7 @@ MarkerClusterer.prototype.addMarker = function (marker) {
  * @return 无返回值
  */
 MarkerClusterer.prototype._createClusters = function () {
+    this._renderStartCallback && this._renderStartCallback()
     var mapBounds = this._map.getBounds();
     var extendedBounds = getExtendedBounds(this._map, mapBounds, this._gridSize);
     for (var i = 0, marker; marker = this._markers[i]; i++) {
@@ -175,6 +178,7 @@ MarkerClusterer.prototype._createClusters = function () {
             this._clusters[i].render();
         }
     }
+    this._renderEndCallback && this._renderEndCallback()
 };
 
 /**
