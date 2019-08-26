@@ -1,5 +1,4 @@
 import BMap from 'BMap'
-import BMapLib from 'BMapLib'
 
 import MarkerClusterer from './lib/MarkerClusterer'
 

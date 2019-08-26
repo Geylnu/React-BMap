@@ -1,7 +1,7 @@
 import BMap from 'BMap'
 import BMapLib from 'BMapLib'
 
-import {getExtendedBounds} from './utils'
+import {getExtendedBounds} from '../lib/utils'
 
 /**
  * @ignore
