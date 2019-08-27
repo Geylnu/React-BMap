@@ -141,11 +141,9 @@ MarkerClusterer.prototype.addMarkers = function (markers) {
  * @return 无返回值。
  */
 MarkerClusterer.prototype._pushMarkerTo = function (marker) {
-    var index = indexOf(marker, this._markers);
-    if (index === -1) {
-        marker.isInCluster = false;
-        this._markers.push(marker);//Marker拖放后enableDragging不做变化，忽略
-    }
+    //原代码会通过indexof()对Marks进行去重，这会带来很大的性能消耗,这里去除了index()
+    marker.isInCluster = false;
+    this._markers.push(marker);//Marker拖放后enableDragging不做变化，忽略
 };
 
 /**
