@@ -1,14 +1,15 @@
-import React from "react"
+import React, {useState} from "react"
 import ReactDOM from 'react-dom'
-import BMap from 'BMap'
 import Overlay from './customerOVerlay'
 
 const Bridge = props => {
-    let { close, markers, map } = props
+    let { close, map,callBack } = props
+    let [markers,setMarks] = useState(props.markers)
 
-    const handleScroll = (e) => {
-        console.log('scorll')
-    }
+    callBack((markers)=>{
+        setMarks(markers)
+    })
+
     let markerList = markers.map((marker, index) => {
         let point = marker.getPosition()
         let { lng, lat } = point
@@ -34,7 +35,6 @@ const Bridge = props => {
             color: 'white', overflow: 'auto',
             background: 'rgba(90,66,0.8)'
         }}
-        onScroll={handleScroll}
     >
         <div>
             <div><span onClick={close}>点击关闭</span></div>
@@ -47,11 +47,49 @@ const Bridge = props => {
 class Infowindow extends Overlay {
     constructor(point, map, markers) {
         super(point, 'floatPane', map)
+        this._callBack = null
         const handleClose = () => {
             this.close()
         }
-        this._reactElement = (<Bridge map={map} markers={markers} close={handleClose} />)
+        this._reactElement = (<Bridge 
+                                map={map} 
+                                markers={markers} 
+                                close={handleClose}
+                                callBack={func=>this._callBack=func}
+                                />)
         ReactDOM.render(this._reactElement, this._container)
+    }
+
+    static positions = []
+    static addPosition(position,infowindow){
+        Infowindow.positions.push({position,infowindow})
+    }
+
+    static getPosition(ponit){
+        let $infowindow = null
+        Infowindow.positions.forEach(({position,infowindow},index)=>{
+            if (position.equals(ponit)){
+                $infowindow = infowindow
+            }
+        })
+        if ($infowindow){
+
+        }
+        return $infowindow
+    }
+
+    static removePosition(ponit){
+        let deleteIndex = -1
+        Infowindow.positions.forEach(({position},index)=>{
+            if (position.lng === ponit.lng && position.lng === position.lat){
+                deleteIndex = index
+            }
+        })
+        Infowindow.positions.splice(deleteIndex,1)
+    }
+
+    static removePositions(){
+        Infowindow.positions = []
     }
 
     _getInfoBoxSize() {
@@ -85,15 +123,21 @@ class Infowindow extends Overlay {
         return moveX || moveY
     }
 
+    setMarkers(markers){
+        this._callBack(markers)
+    }
+
     open() {
         this._map.addOverlay(this)
         // this._map.panBy(-100, -100)
         this._getInfoBoxSize()
         this._moveBox()
+        Infowindow.addPosition(this._position,this)
     }
 
     close() {
         this._map.removeOverlay(this)
+        Infowindow.removePosition(this._position)
     }
 }
 

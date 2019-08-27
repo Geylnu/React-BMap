@@ -152,11 +152,17 @@ Cluster.prototype.updateClusterMarker = function () {
     //     html.appendChild(son)
     // })
 
-
+    let point = this._clusterMarker.getPosition()
+    let infoBox = InfoBox.getPosition(point)
+    if (infoBox){
+        infoBox.setMarkers(this._markers)
+    }
     this._clusterMarker.addEventListener("click", (event) => {
-            console.log(this._markers)
-            let infoBox = new InfoBox(this._clusterMarker.getPosition(),this._map,this._markers)
-            infoBox.open()
+            let infoBox = InfoBox.getPosition(point)
+            if (!infoBox){
+                infoBox =new InfoBox(point,this._map,this._markers)
+                infoBox.open()
+            }
             // thatMap.setViewport(thatBounds);
     });
 

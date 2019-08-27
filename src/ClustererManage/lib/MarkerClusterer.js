@@ -114,7 +114,7 @@ function MarkerClusterer(map, options) {
     });
 
     this._map.addEventListener("moveend", function () {
-        that._redraw(true);
+        that._redraw();
     });
 
     var mkrs = opts["markers"];
@@ -166,7 +166,6 @@ MarkerClusterer.prototype._createClusters = function () {
     this._renderStartCallback && this._renderStartCallback()
     var mapBounds = this._map.getBounds();
     var extendedBounds = getExtendedBounds(this._map, mapBounds, this._gridSize);
-    extendedBounds = getExtendedBounds(this._map, extendedBounds, this._gridSize);
     for (var i = 0, marker; marker = this._markers[i]; i++) {
         if (!marker.isInCluster && extendedBounds.containsPoint(marker.getPosition())) {
             this._addToClosestCluster(marker);
@@ -314,7 +313,7 @@ MarkerClusterer.prototype.clearMarkers = function () {
  * 重新生成，比如改变了属性等
  * @return 无返回值serve
  */
-MarkerClusterer.prototype._redraw = function (reserve) {
+MarkerClusterer.prototype._redraw = function () {
     this._clearLastClusters();
     this._createClusters();
 };
