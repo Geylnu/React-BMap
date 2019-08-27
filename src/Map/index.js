@@ -1,10 +1,7 @@
 import React, {useState} from 'react';
 import ClustererManage from '../ClustererManage'
-import Overlay from '../ClustererManage/overlay'
-import OverlayTest from '../ClustererManage/OverlayTest'
 
 import { Map, Marker, NavigationControl, InfoWindow } from 'react-bmap'
-import BMap from 'BMap'
 
 
 const genData = (max)=>{
@@ -22,7 +19,7 @@ const genData = (max)=>{
 const $Map = props => {
     return (<Map style={{}} center={{ lng: 116.402544, lat: 39.928216 }} zoom="5" enableScrollWheelZoom={true}>
     <NavigationControl />
-    <ClustererManage gridSize={100} data={genData(100000)}/>
+    <ClustererManage gridSize={100} data={genData(50000)}/>
 </Map>)
 }
 

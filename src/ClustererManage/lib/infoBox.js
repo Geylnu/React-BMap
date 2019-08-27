@@ -2,6 +2,7 @@ import React, {useState} from "react"
 import ReactDOM from 'react-dom'
 import Overlay from './customerOVerlay'
 
+
 const Bridge = props => {
     let { close, map,callBack } = props
     let [markers,setMarks] = useState(props.markers)
@@ -63,6 +64,7 @@ class Infowindow extends Overlay {
                                 callBack={func=>this._callBack=func}
                                 />)
         ReactDOM.render(this._reactElement, this._container)
+        this.bindEvents()
     }
 
     static positions = []
@@ -72,14 +74,11 @@ class Infowindow extends Overlay {
 
     static getPosition(ponit){
         let $infowindow = null
-        Infowindow.positions.forEach(({position,infowindow},index)=>{
-            if (position.equals(ponit)){
+        Infowindow.positions.forEach(({ position, infowindow }, index) => {
+            if (position.equals(ponit)) {
                 $infowindow = infowindow
             }
         })
-        if ($infowindow){
-
-        }
         return $infowindow
     }
 
@@ -126,6 +125,19 @@ class Infowindow extends Overlay {
         this._map.panBy(-moveX,-moveY)
 
         return moveX || moveY
+    }
+
+    bindEvents(){
+        this._map.addEventListener("zoomend",  ()=> {
+            this.close()
+        })
+
+        this._map.addEventListener("moveend", ()=> {
+            let mapBounds = this._map.getBounds()
+                if (!mapBounds.containsPoint(this._position)) {
+                    this.close()
+                }
+        });
     }
 
     setMarkers(markers){
