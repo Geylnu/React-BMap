@@ -5,6 +5,7 @@ import Overlay from './customerOVerlay'
 const Bridge = props => {
     let { close, map,callBack } = props
     let [markers,setMarks] = useState(props.markers)
+    let [show, setShow] = useState(true)
 
     callBack((markers)=>{
         setMarks(markers)
@@ -31,13 +32,17 @@ const Bridge = props => {
     });
     return (<div
         style={{
+            display: show ? 'block' : 'none',
             cursor: 'pointer',
             color: 'white', overflow: 'auto',
             background: 'rgba(90,66,0.8)'
         }}
     >
         <div>
-            <div><span onClick={close}>点击关闭</span></div>
+            <div><span onClick={()=>{
+                setShow(false)
+                close()
+            }}>点击关闭</span></div>
             <ul style={{ maxHeight: '350px' }}>
                 {markerList}
             </ul>
