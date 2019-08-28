@@ -19,7 +19,7 @@ const genData = (max)=>{
 const $Map = props => {
     return (<Map style={{}} center={{ lng: 116.402544, lat: 39.928216 }} zoom="5" enableScrollWheelZoom={true}>
     <NavigationControl />
-    <ClustererManage gridSize={100} data={genData(50000)}/>
+    <ClustererManage gridSize={60} data={genData(50000)}/>
 </Map>)
 }
 

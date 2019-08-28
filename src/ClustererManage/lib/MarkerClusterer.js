@@ -1,5 +1,7 @@
 ﻿import BMap from 'BMap'
 import Cluster from './Cluster'
+import Geohash from 'latlon-geohash'
+
 
 import {getExtendedBounds} from './utils'
 /**
@@ -95,12 +97,14 @@ function MarkerClusterer(map, options) {
     this._map = map;
     this._markers = [];
     this._clusters = [];
+    this._geoHashMap = new Map()
 
     var opts = options || {};
     this._gridSize = opts["gridSize"] || 60;
     this._maxZoom = opts["maxZoom"] || 18;
-    this._minClusterSize = opts["minClusterSize"] || 2;
+    this._minClusterSize = opts["minClusterSize"] || 1;
     this._isAverageCenter = false;
+    this._geoHashLevel = opts['geoHashLevel'] || 2
     this._renderStartCallback = opts['renderStart']
     this._renderEndCallback = opts['renderEnd']
     if (opts['isAverageCenter'] != undefined) {
@@ -119,6 +123,10 @@ function MarkerClusterer(map, options) {
 
     var mkrs = opts["markers"];
     isArray(mkrs) && this.addMarkers(mkrs);
+    console.log(this._geoHashMap)
+    let hash = Geohash.encode( 39.928216,116.402544,this._geoHashLevel)
+    console.log(hash)
+    console.log(this._geoHashMap.get(hash))
 };
 
 /**
@@ -144,6 +152,14 @@ MarkerClusterer.prototype._pushMarkerTo = function (marker) {
     //原代码会通过indexof()对Marks进行去重，这会带来很大的性能消耗,这里去除了index()
     marker.isInCluster = false;
     this._markers.push(marker);//Marker拖放后enableDragging不做变化，忽略
+
+    let {lng,lat} = marker.getPosition()
+    let hash = Geohash.encode(lat,lng,this._geoHashLevel )
+    if (!this._geoHashMap.has(hash)){
+        this._geoHashMap.set(hash,[marker])
+    }else if (Array.isArray(this._geoHashMap.get(hash))){
+        this._geoHashMap.get(hash).push(marker)
+    }
 };
 
 /**
@@ -161,21 +177,39 @@ MarkerClusterer.prototype.addMarker = function (marker) {
  * @return 无返回值
  */
 MarkerClusterer.prototype._createClusters = function () {
+    let startTime = Date.now()
     this._renderStartCallback && this._renderStartCallback()
     var mapBounds = this._map.getBounds();
     var extendedBounds = getExtendedBounds(this._map, mapBounds, this._gridSize);
-    for (var i = 0, marker; marker = this._markers[i]; i++) {
-        if (!marker.isInCluster && extendedBounds.containsPoint(marker.getPosition())) {
-            this._addToClosestCluster(marker);
-        }
+    
+    let marksInViewport = this._markers.filter((marker)=>{
+        return !marker.isInCluster && extendedBounds.containsPoint(marker.getPosition())
     }
+    ) 
+    
+    let start  = Date.now()
+    marksInViewport.forEach((marker)=>{
+        this._addToClosestCluster(marker);
+    })
+    console.log('计算所有点时间',Date.now()-start)
+    console.log('点数量',marksInViewport.length)
+    console.log('点聚集数量',this._clusters.length)
+    
 
+    let middleTime = Date.now() -startTime
     var len = this._markers.length;
     for (var i = 0; i < len; i++) {
         if (this._clusters[i]) {
             this._clusters[i].render();
         }
     }
+
+    let endTime = Date.now() -startTime
+
+    console.log('聚集点创建时间',middleTime)
+    console.log('聚集点渲染时间',endTime-middleTime)
+    console.log('创建时间占比',`${middleTime/endTime*100}%`)
+    console.log('渲染时间占比',`${(endTime-middleTime)/endTime*100}%`)
     this._renderEndCallback && this._renderEndCallback()
 };
 
@@ -192,7 +226,7 @@ MarkerClusterer.prototype._addToClosestCluster = function (marker) {
     for (var i = 0, cluster; cluster = this._clusters[i]; i++) {
         var center = cluster.getCenter();
         if (center) {
-            var d = this._map.getDistance(center, marker.getPosition());
+            var d = this._map.getDistance(center, position);
             if (d < distance) {
                 distance = d;
                 clusterToAddTo = cluster;
