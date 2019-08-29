@@ -20,6 +20,7 @@ function Cluster(markerClusterer) {
     this._markers = [];//这个Cluster中所包含的markers
     this._gridBounds = null;//以中心点为准，向四边扩大gridSize个像素的范围，也即网格范围
     this._isReal = false; //真的是个聚合
+    this._containHash = []
 
     // this._clusterMarker = new BMapLib.TextIconOverlay(this._center, this._markers.length, { "styles": this._markerClusterer.getStyles() });
     this._clusterMarker = new TextIcon(this._center, this._markers.length)

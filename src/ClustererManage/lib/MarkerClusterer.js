@@ -104,7 +104,7 @@ function MarkerClusterer(map, options) {
     this._maxZoom = opts["maxZoom"] || 18;
     this._minClusterSize = opts["minClusterSize"] || 1;
     this._isAverageCenter = false;
-    this._geoHashLevel = opts['geoHashLevel'] || 2
+    this._geoHashLevel = opts['geoHashLevel'] || 6
     this._renderStartCallback = opts['renderStart']
     this._renderEndCallback = opts['renderEnd']
     if (opts['isAverageCenter'] != undefined) {
@@ -123,10 +123,6 @@ function MarkerClusterer(map, options) {
 
     var mkrs = opts["markers"];
     isArray(mkrs) && this.addMarkers(mkrs);
-    console.log(this._geoHashMap)
-    let hash = Geohash.encode( 39.928216,116.402544,this._geoHashLevel)
-    console.log(hash)
-    console.log(this._geoHashMap.get(hash))
 };
 
 /**
@@ -149,10 +145,8 @@ MarkerClusterer.prototype.addMarkers = function (markers) {
  * @return 无返回值。
  */
 MarkerClusterer.prototype._pushMarkerTo = function (marker) {
-    //原代码会通过indexof()对Marks进行去重，这会带来很大的性能消耗,这里去除了index()
-    marker.isInCluster = false;
-    this._markers.push(marker);//Marker拖放后enableDragging不做变化，忽略
-
+    // 原代码会通过indexof()对Marks进行去重，这会带来很大的性能消耗,这里去除了index()
+    // 现在可以用hash去重了
     let {lng,lat} = marker.getPosition()
     let hash = Geohash.encode(lat,lng,this._geoHashLevel )
     if (!this._geoHashMap.has(hash)){
@@ -160,6 +154,12 @@ MarkerClusterer.prototype._pushMarkerTo = function (marker) {
     }else if (Array.isArray(this._geoHashMap.get(hash))){
         this._geoHashMap.get(hash).push(marker)
     }
+
+    
+    marker.isInCluster = false;
+    marker.geoHash = hash
+    this._markers.push(marker);//Marker拖放后enableDragging不做变化，忽略
+
 };
 
 /**
