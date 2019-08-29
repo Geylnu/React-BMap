@@ -28,14 +28,14 @@ const ClustererManage = props =>{
     }
 
     const renderEnd = ()=>{
-        console.log('zoom',zoom)
+        // console.log('zoom',zoom)
         console.log(Date.now() - begin)
-        if (zoom <20){
-            window.setTimeout(()=>{
-                map.setZoom(zoom)
-                zoom+=1
-            },300)
-        }
+        // if (zoom <20){
+        //     window.setTimeout(()=>{
+        //         map.setZoom(zoom)
+        //         zoom+=1
+        //     },300)
+        // }
     }
     
     let clustererManage = new MarkerClusterer(map,

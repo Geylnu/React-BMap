@@ -1,4 +1,5 @@
 import BMap from 'BMap'
+import Geohash from 'latlon-geohash'
 
 import {getExtendedBounds} from './utils'
 import TextIcon from './TextIcon'
@@ -20,7 +21,7 @@ function Cluster(markerClusterer) {
     this._markers = [];//这个Cluster中所包含的markers
     this._gridBounds = null;//以中心点为准，向四边扩大gridSize个像素的范围，也即网格范围
     this._isReal = false; //真的是个聚合
-    this._containHash = []
+    this._containHash = new Map
 
     // this._clusterMarker = new BMapLib.TextIconOverlay(this._center, this._markers.length, { "styles": this._markerClusterer.getStyles() });
     this._clusterMarker = new TextIcon(this._center, this._markers.length)
@@ -110,7 +111,33 @@ Cluster.prototype.isReal = function (marker) {
 Cluster.prototype.updateGridBounds = function () {
     var bounds = new BMap.Bounds(this._center, this._center);
     this._gridBounds = getExtendedBounds(this._map, bounds, this._markerClusterer.getGridSize());
+    this.updatContainHash()
 };
+
+Cluster.prototype.updatContainHash = function (){
+    let bounds = this._gridBounds
+    let sw = bounds.getSouthWest()
+    let fomatBounds = Geohash.bounds(Geohash.encode(sw.lat,sw.lng,3)) 
+    let fomatSw = new BMap.Point(fomatBounds.sw.lon,fomatBounds.sw.lat)
+    let fomatNe = new BMap.Point(fomatBounds.ne.lon,fomatBounds.ne.lat)
+    let hashBounds = new BMap.Bounds(fomatSw,fomatNe)
+    let hashPoints = getDrawPoints(hashBounds)
+    let ponits = getDrawPoints(bounds)
+    this._test = new BMap.Polygon(ponits)
+    this._hashTest = new BMap.Polygon(hashPoints)
+    debugger
+    this._hashTest.setFillColor('blue')
+    this._map.addOverlay(this._test)
+    this._map.addOverlay(this._hashTest)
+}
+
+function getDrawPoints(bounds){
+    let sw = bounds.getSouthWest()
+    let ne = bounds.getNorthEast()
+    let nw = {lng: sw.lng,lat:ne.lat}
+    let se = {lng: ne.lng,lat:sw.lat}
+    return [nw,ne,se,sw]
+}
 
 /**
  * 更新该聚合的显示样式，也即TextIconOverlay。
@@ -182,6 +209,8 @@ Cluster.prototype.remove = function () {
     this._map.removeOverlay(this._clusterMarker);
     this._markers.length = 0;
     delete this._markers;
+    this._map.removeOverlay(this._test)
+    this._map.removeOverlay(this._hashTest)
 }
 
 /**
